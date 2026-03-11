@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VaBien Akademi - A1 7. Bölüm Testi</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap');
+  :root{--gold:#d4af37;--gold-dim:rgba(212,175,55,0.15);--bg-dark:#0f1923;--bg-mid:#1a2a3a;--bg-card:rgba(255,255,255,0.04);--text:#e8e6e1;--text-dim:rgba(232,230,225,0.5);--green:#66bb6a;--red:#ef5350;--blue:#42a5f5;--orange:#ffa726;--purple:#ab47bc;--teal:#26a69a;--pink:#ec407a;--cyan:#26c6da;--lime:#c0ca33;--amber:#ffb300;--brown:#8d6e63}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Nunito',sans-serif;background:linear-gradient(160deg,var(--bg-dark) 0%,var(--bg-mid) 40%,#1e3348 100%);color:var(--text);min-height:100vh;padding-bottom:40px}
+  .header{background:linear-gradient(135deg,var(--gold-dim),rgba(212,175,55,0.05));border-bottom:1px solid rgba(212,175,55,0.2);padding:16px 20px;position:sticky;top:0;z-index:50;backdrop-filter:blur(20px)}
+  .header-inner{max-width:850px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .logo-area{display:flex;align-items:center;gap:12px}
+  .logo-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#b8962e);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--bg-mid);font-family:'Playfair Display',serif}
+  .logo-text h1{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--gold);letter-spacing:1px}
+  .logo-text p{font-size:11px;color:rgba(212,175,55,0.6);letter-spacing:2px;text-transform:uppercase}
+  .timer-box{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:8px 16px;border-radius:10px;font-size:18px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+  .timer-box.warning{color:var(--orange);border-color:rgba(255,167,38,0.3)}
+  .timer-box.danger{color:var(--red);border-color:rgba(239,83,80,0.3);animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .container{max-width:850px;margin:0 auto;padding:20px 16px}
+  .start-screen{text-align:center;padding:40px 20px;animation:fadeIn .5s ease}
+  .start-screen h2{font-family:'Playfair Display',serif;color:var(--gold);font-size:26px;margin-bottom:12px}
+  .start-screen p{color:var(--text-dim);font-size:15px;margin-bottom:6px}
+  .start-topics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;max-width:650px;margin:20px auto;text-align:left}
+  @media(max-width:600px){.start-topics{grid-template-columns:1fr 1fr}}
+  .st-item{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .st-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .start-btn{margin-top:28px;padding:16px 48px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--gold),#b8962e);color:var(--bg-mid);font-size:18px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:transform .2s;letter-spacing:1px}
+  .start-btn:hover{transform:scale(1.04)}
+  .topic-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;padding:14px 16px;background:var(--bg-card);border:1px solid rgba(255,255,255,0.06);border-radius:14px}
+  .topic-tag{padding:4px 10px;border-radius:7px;font-size:10px;font-weight:700;letter-spacing:.4px}
+  .progress-wrapper{margin-bottom:20px}
+  .progress-info{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;color:var(--text-dim)}
+  .progress-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),#b8962e);transition:width .4s ease}
+  .question-card{background:var(--bg-card);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;margin-bottom:14px;transition:all .3s ease;animation:fadeIn .4s ease}
+  .question-card.correct{border-color:rgba(102,187,106,0.4);background:rgba(102,187,106,0.06)}
+  .question-card.wrong{border-color:rgba(239,83,80,0.4);background:rgba(239,83,80,0.06)}
+  .q-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .q-number{width:30px;height:30px;border-radius:8px;background:var(--gold-dim);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+  .q-topic{font-size:9px;font-weight:700;padding:3px 8px;border-radius:5px;text-transform:uppercase;letter-spacing:.4px}
+  .q-ctx{font-size:12px;color:var(--text-dim);margin-bottom:10px;padding:6px 10px;background:rgba(255,255,255,0.03);border-radius:7px;border-left:3px solid rgba(212,175,55,0.25);line-height:1.5}
+  .q-text{font-size:15px;font-weight:600;line-height:1.6;margin-bottom:14px}
+  .q-text em{color:var(--gold);font-style:normal;font-weight:800}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:500px){.options{grid-template-columns:1fr}}
+  .opt-btn{padding:11px 14px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:var(--text);font-size:13px;font-weight:600;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .2s;text-align:left}
+  .opt-btn:hover:not(:disabled){border-color:rgba(212,175,55,0.4);background:rgba(212,175,55,0.08)}
+  .opt-btn:disabled{cursor:default}
+  .opt-btn.correct-answer{border-color:rgba(102,187,106,0.6);background:rgba(102,187,106,0.12);color:var(--green)}
+  .opt-btn.wrong-answer{border-color:rgba(239,83,80,0.6);background:rgba(239,83,80,0.12);color:var(--red);text-decoration:line-through}
+  .explanation{margin-top:12px;padding:10px 14px;border-radius:10px;font-size:12px;line-height:1.6;animation:fadeIn .3s ease}
+  .explanation.correct-exp{background:rgba(102,187,106,0.08);border:1px solid rgba(102,187,106,0.2);color:rgba(102,187,106,0.9)}
+  .explanation.wrong-exp{background:rgba(239,83,80,0.08);border:1px solid rgba(239,83,80,0.2);color:rgba(239,83,80,0.9)}
+  .explanation strong{color:var(--text)}
+  .results-card{background:var(--bg-card);border:1px solid rgba(212,175,55,0.2);border-radius:20px;padding:40px 24px;text-align:center;animation:fadeIn .5s ease}
+  .score-circle{width:140px;height:140px;border-radius:50%;border:6px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+  .score-circle .score-num{font-family:'Playfair Display',serif;font-size:42px;font-weight:800;color:var(--gold)}
+  .score-circle .score-total{font-size:14px;color:var(--text-dim)}
+  .results-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+  .stat-item{background:rgba(255,255,255,0.04);border-radius:12px;padding:16px 10px}
+  .stat-item .stat-val{font-size:24px;font-weight:800;font-family:'Playfair Display',serif}
+  .stat-item .stat-label{font-size:11px;color:var(--text-dim);margin-top:4px}
+  .topic-breakdown{text-align:left;margin-top:24px;padding:20px;background:rgba(255,255,255,0.03);border-radius:14px;border:1px solid rgba(255,255,255,0.06)}
+  .topic-breakdown h3{font-family:'Playfair Display',serif;color:var(--gold);font-size:16px;margin-bottom:16px}
+  .topic-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .topic-row .t-name{flex:1;font-size:12px;font-weight:600}
+  .topic-row .t-score{font-size:12px;font-weight:700;min-width:45px;text-align:right}
+  .topic-row .t-bar{width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+  .topic-row .t-bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+  .btn-restart{margin-top:24px;padding:14px 40px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--gold),#b8962e);color:var(--bg-mid);font-size:16px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:transform .2s}
+  .btn-restart:hover{transform:scale(1.03)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+    <body> <center>
+        <img src="logolar/vabienlogo.png" alt=""
+        height="200" width="300"
+    </body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-icon">V</div>
+      <div class="logo-text">
+        <h1>VaBien Akademi</h1>
+        <p>A1 — 7. Bölüm Testi</p>
+      </div>
+    </div>
+    <div class="timer-box" id="timer">⏱ 45:00</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="start-screen" id="startScreen">
+    <div style="font-size:64px;margin-bottom:16px">🍽️</div>
+    <h2>A1 — 7. Bölüm Testi</h2>
+    <p>Yiyecekler, Pişirme Yöntemleri, Restoran Diyalogları</p>
+    <p style="color:var(--text-dim);font-size:14px;margin-top:4px">9 farklı konudan <strong>60 soru</strong></p>
+    <div class="start-topics">
+      <div class="st-item"><div class="dot" style="background:#66bb6a"></div>Alimentos</div>
+      <div class="st-item"><div class="dot" style="background:#ef5350"></div>Maneras de Cocinar</div>
+      <div class="st-item"><div class="dot" style="background:#ab47bc"></div>Poner la Mesa</div>
+      <div class="st-item"><div class="dot" style="background:#42a5f5"></div>Preposiciones de/con</div>
+      <div class="st-item"><div class="dot" style="background:#ec407a"></div>Pronombres OD</div>
+      <div class="st-item"><div class="dot" style="background:#26a69a"></div>Restoran Diyalogları</div>
+      <div class="st-item"><div class="dot" style="background:#ffb300"></div>Poner / Traer</div>
+      <div class="st-item"><div class="dot" style="background:#c0ca33"></div>Sabor Sıfatları</div>
+      <div class="st-item"><div class="dot" style="background:#8d6e63"></div>El Bocata — Fiyatlar</div>
+    </div>
+    <p style="margin-top:20px;font-size:13px;color:rgba(232,230,225,0.35)">Süre: 45 dakika • Sorular rastgele sıralanır</p>
+    <button class="start-btn" onclick="startTest()">Teste Başla →</button>
+  </div>
+
+  <div id="testArea" class="hidden">
+    <div class="topic-bar" id="topicBar"></div>
+    <div class="progress-wrapper">
+      <div class="progress-info"><span id="progressText">0 / 60</span><span id="progressPercent">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div id="questionsContainer"></div>
+    <button class="btn-restart" id="finishBtn" onclick="finishTest()" style="display:none;width:100%;margin-top:20px">📊 Testi Bitir ve Sonuçları Gör</button>
+  </div>
+  <div id="resultsArea" class="hidden"></div>
+</div>
+
+<script>
+const T={
+  alim:{name:"Alimentos",color:"#66bb6a",bg:"rgba(102,187,106,0.12)"},
+  cocin:{name:"Maneras de Cocinar",color:"#ef5350",bg:"rgba(239,83,80,0.12)"},
+  mesa:{name:"Poner la Mesa",color:"#ab47bc",bg:"rgba(171,71,188,0.12)"},
+  prep:{name:"Preposiciones de/con",color:"#42a5f5",bg:"rgba(66,165,245,0.12)"},
+  od:{name:"Pronombres OD",color:"#ec407a",bg:"rgba(236,64,122,0.12)"},
+  rest:{name:"Restoran Diyaloğu",color:"#26a69a",bg:"rgba(38,166,154,0.12)"},
+  verb:{name:"Poner / Traer",color:"#ffb300",bg:"rgba(255,179,0,0.12)"},
+  sabor:{name:"Sabor Sıfatları",color:"#c0ca33",bg:"rgba(192,202,51,0.12)"},
+  bocata:{name:"El Bocata Fiyatlar",color:"#8d6e63",bg:"rgba(141,110,99,0.12)"}
+};
+
+const questions=[
+  // ===== ALIMENTOS — 8 soru =====
+  {id:1,topic:"alim",text:"Hangisi \"verduras y hortalizas\" (sebze) kategorisine aittir?",options:["el salmón","la cebolla","el queso","el trigo"],answer:1,exp:"<strong>La cebolla</strong> (soğan) sebze kategorisindedir. Salmón = balık, queso = peynir, trigo = buğday."},
+  {id:2,topic:"alim",text:"\"Las gambas\" hangi kategoriye aittir?",options:["Carnes","Frutas","Pescados y mariscos","Cereales"],answer:2,exp:"<strong>Las gambas</strong> (karides) <strong>pescados y mariscos</strong> (balık ve deniz ürünleri) kategorisindedir."},
+  {id:3,topic:"alim",text:"Hangisi \"productos lácteos\" (süt ürünleri) değildir?",options:["la leche","el yogur","el helado","la harina"],answer:3,exp:"<strong>La harina</strong> (un) süt ürünü değildir, tahıl/baklagil kategorisindedir."},
+  {id:4,topic:"alim",text:"\"El plátano\" ve \"la naranja\" hangi kategoridedir?",options:["Verduras","Bebidas","Frutas","Otros"],answer:2,exp:"Plátano (muz) ve naranja (portakal) <strong>frutas</strong> (meyveler) kategorisindedir."},
+  {id:5,topic:"alim",text:"Hangisi \"bebidas\" (içecekler) kategorisinde yer almaz?",options:["el café","la cerveza","el refresco","los garbanzos"],answer:3,exp:"<strong>Los garbanzos</strong> (nohut) cereales y legumbres kategorisindedir, içecek değildir."},
+  {id:6,topic:"alim",text:"\"El chorizo\" hangi kategoriye aittir?",options:["Pescados","Frutas","Carnes y embutidos","Productos lácteos"],answer:2,exp:"<strong>El chorizo</strong> (sucuk) <strong>carnes y embutidos</strong> (et ve şarküteri) kategorisindedir."},
+  {id:7,topic:"alim",text:"\"La ternera\" ne demektir?",options:["Domuz eti","Dana eti","Tavuk eti","Kuzu eti"],answer:1,exp:"<strong>La ternera</strong> = dana eti. (El cerdo = domuz, el pollo = tavuk)"},
+  {id:8,topic:"alim",text:"\"Las lentejas\" ne demektir?",options:["Fasulye","Mercimek","Nohut","Pirinç"],answer:1,exp:"<strong>Las lentejas</strong> = mercimek. (Los garbanzos = nohut, las judías = fasulye)"},
+
+  // ===== MANERAS DE COCINAR + sıfat uyumu — 8 soru =====
+  {id:9,topic:"cocin",text:"\"La carne asad<em>______</em> de mi abuela.\" — Doğru ek nedir?",ctx:"La carne = kadın, tekil",options:["-o","-a","-os","-as"],answer:1,exp:"\"La carne\" kadın cinsiyetinde tekil → asad<strong>a</strong>. Sıfat isimle cinsiyet ve sayı bakımından uyum gösterir."},
+  {id:10,topic:"cocin",text:"\"Los huevos frit<em>______</em> con jamón.\" — Doğru ek?",ctx:"Los huevos = erkek, çoğul",options:["-o","-a","-os","-as"],answer:2,exp:"\"Los huevos\" erkek cinsiyetinde çoğul → frit<strong>os</strong>."},
+  {id:11,topic:"cocin",text:"\"El pescadito frit<em>______</em>.\" — Doğru ek?",ctx:"El pescadito = erkek, tekil",options:["-o","-a","-os","-as"],answer:0,exp:"\"El pescadito\" erkek cinsiyetinde tekil → frit<strong>o</strong>."},
+  {id:12,topic:"cocin",text:"\"Las patatas guisad<em>______</em> con chorizo.\" — Doğru ek?",ctx:"Las patatas = kadın, çoğul",options:["-o","-a","-os","-as"],answer:3,exp:"\"Las patatas\" kadın cinsiyetinde çoğul → guisad<strong>as</strong>."},
+  {id:13,topic:"cocin",text:"\"El pollo asad<em>______</em> con patatas frit<em>______</em>.\" — Doğru ekler?",options:["-o / -os","-a / -as","-o / -as","-a / -os"],answer:2,exp:"El pollo (erkek tekil) → asad<strong>o</strong>. Patatas (kadın çoğul) → frit<strong>as</strong>."},
+  {id:14,topic:"cocin",text:"\"Espinacas cocid<em>______</em> con patatas.\" — Doğru ek?",ctx:"Espinacas = kadın, çoğul",options:["-o","-a","-os","-as"],answer:3,exp:"\"Espinacas\" kadın cinsiyetinde çoğul → cocid<strong>as</strong>. (Cocido/a = haşlanmış)"},
+  {id:15,topic:"cocin",text:"\"Al vapor\" ne anlama gelir?",options:["Fırında","Buharda","Kızartma","Izgarada"],answer:1,exp:"<strong>Al vapor</strong> = buharda pişmiş. (Al horno = fırında, frito = kızartma, a la parrilla = ızgarada)"},
+  {id:16,topic:"cocin",text:"\"A la plancha\" ne anlama gelir?",options:["Haşlanmış","Çiğ","Tavada/ızgarada (düz yüzeyde)","Güveçte"],answer:2,exp:"<strong>A la plancha</strong> = düz yüzeyde/tavada pişmiş. A la parrilla = ızgarada (ızgara çubuklu)."},
+
+  // ===== PONER LA MESA — 5 soru =====
+  {id:17,topic:"mesa",text:"Çorba içmek için hangi sofra gereci kullanılır?",options:["el tenedor","el cuchillo","la cuchara","la cucharilla"],answer:2,exp:"<strong>La cuchara</strong> = kaşık. Çorba kaşıkla içilir. (La cucharilla = tatlı/kahve kaşığı)"},
+  {id:18,topic:"mesa",text:"\"El tenedor\" ne demektir?",options:["Bıçak","Çatal","Kaşık","Tabak"],answer:1,exp:"<strong>El tenedor</strong> = çatal. (El cuchillo = bıçak, la cuchara = kaşık)"},
+  {id:19,topic:"mesa",text:"Şarap hangi bardakta servis edilir?",options:["el vaso","la taza","la copa","la cucharilla"],answer:2,exp:"<strong>La copa</strong> = kadeh. Şarap kadehte servis edilir. (El vaso = su bardağı, la taza = fincan)"},
+  {id:20,topic:"mesa",text:"\"La servilleta\" ne demektir?",options:["Tabak","Peçete","Bardak","Çatal"],answer:1,exp:"<strong>La servilleta</strong> = peçete."},
+  {id:21,topic:"mesa",text:"Kahve hangi bardakta içilir?",options:["la copa","el vaso","la taza","el plato"],answer:2,exp:"<strong>La taza</strong> = fincan. Kahve fincanda içilir."},
+
+  // ===== PREPOSICIONES DE / CON — 7 soru =====
+  {id:22,topic:"prep",text:"¿Tomás el té <em>______</em> leche o <em>______</em> limón?",ctx:"Çayı sütlü mü limonlu mu içersin?",options:["de / de","con / con","con / de","a / con"],answer:1,exp:"İçeceğe eklenen malzeme için <strong>con</strong> kullanılır. Con leche = sütlü, con limón = limonlu."},
+  {id:23,topic:"prep",text:"Quiero un bocadillo <em>______</em> jamón serrano.",ctx:"Jamón serranolu sandviç istiyorum.",options:["con","de","a","en"],answer:1,exp:"Sandviçin ana malzemesi için <strong>de</strong> kullanılır. Bocadillo <strong>de</strong> jamón = jambonlu sandviç."},
+  {id:24,topic:"prep",text:"¿Quieres zumo <em>______</em> naranja?",ctx:"Portakal suyu ister misin?",options:["con","a","de","en"],answer:2,exp:"İçeceğin türü/çeşidi için <strong>de</strong> kullanılır. Zumo <strong>de</strong> naranja = portakal suyu."},
+  {id:25,topic:"prep",text:"¿Tenéis tortilla <em>______</em> patatas?",ctx:"Patatesli tortillanız var mı?",options:["con","a","de","en"],answer:2,exp:"Yemeğin ana malzemesi: tortilla <strong>de</strong> patatas. De = -lı/-li (ana malzeme)."},
+  {id:26,topic:"prep",text:"Un café solo <em>______</em> hielo, por favor.",ctx:"Buzlu sade kahve, lütfen.",options:["de","a","en","con"],answer:3,exp:"Eklenen şey (buz) için <strong>con</strong> kullanılır. Con hielo = buzlu."},
+  {id:27,topic:"prep",text:"¿Tienen helado <em>______</em> chocolate?",ctx:"Çikolatalı dondurmanız var mı?",options:["con","a","de","en"],answer:2,exp:"Dondurmanın çeşidi: helado <strong>de</strong> chocolate. De = türü/çeşidi belirtir."},
+  {id:28,topic:"prep",text:"La carne viene <em>______</em> ensalada o <em>______</em> patatas.",ctx:"Et salataylı veya patatesli gelir.",options:["de / de","con / con","de / con","a / de"],answer:1,exp:"Garnitür (eşlik eden yiyecek) için <strong>con</strong> kullanılır. Viene <strong>con</strong> ensalada = salatayla gelir."},
+
+  // ===== PRONOMBRES OD: lo/la/los/las — 9 soru =====
+  {id:29,topic:"od",text:"\"¿Cómo tomas <em>el café</em>?\" — \"<em>______</em> tomo con leche.\"",ctx:"El café = erkek, tekil",options:["La","Lo","Los","Las"],answer:1,exp:"\"El café\" erkek cinsiyetinde tekil → <strong>Lo</strong> tomo. Lo = erkek tekil nesne zamiri."},
+  {id:30,topic:"od",text:"\"¿Dónde compras <em>la fruta</em>?\" — \"<em>______</em> compro en el mercado.\"",ctx:"La fruta = kadın, tekil",options:["Lo","La","Los","Las"],answer:1,exp:"\"La fruta\" kadın cinsiyetinde tekil → <strong>La</strong> compro."},
+  {id:31,topic:"od",text:"\"¿Te gustan <em>los cereales</em>?\" — \"Sí, <em>______</em> tomo con leche.\"",ctx:"Los cereales = erkek, çoğul",options:["Lo","La","Los","Las"],answer:2,exp:"\"Los cereales\" erkek cinsiyetinde çoğul → <strong>Los</strong> tomo."},
+  {id:32,topic:"od",text:"\"¿Cómo comes <em>las patatas</em>?\" — \"<em>______</em> como siempre fritas.\"",ctx:"Las patatas = kadın, çoğul",options:["Lo","La","Los","Las"],answer:3,exp:"\"Las patatas\" kadın cinsiyetinde çoğul → <strong>Las</strong> como."},
+  {id:33,topic:"od",text:"\"<em>Lo</em> compro en el mercado.\" — \"Lo\" neyi temsil edebilir?",options:["la carne","las verduras","el pescado","las patatas"],answer:2,exp:"<strong>Lo</strong> = erkek tekil nesne zamiri. Seçeneklerden <strong>el pescado</strong> (erkek tekil) uygundur."},
+  {id:34,topic:"od",text:"\"¿<em>Los</em> pones en la nevera?\" — \"Los\" neyi temsil edebilir?",options:["la leche","el queso","los plátanos","las gambas"],answer:2,exp:"<strong>Los</strong> = erkek çoğul nesne zamiri. <strong>Los plátanos</strong> (erkek çoğul) uygundur."},
+  {id:35,topic:"od",text:"\"¿<em>La</em> tomas caliente?\" — \"La\" neyi temsil edebilir?",options:["la cerveza","el zumo","los refrescos","las salsas"],answer:0,exp:"<strong>La</strong> = kadın tekil nesne zamiri. <strong>La cerveza</strong> (kadın tekil) uygundur."},
+  {id:36,topic:"od",text:"\"<em>Las</em> preparo siempre al vapor.\" — \"Las\" neyi temsil edebilir?",options:["el pescado","los huevos","la carne","las verduras"],answer:3,exp:"<strong>Las</strong> = kadın çoğul nesne zamiri. <strong>Las verduras</strong> (kadın çoğul) uygundur."},
+  {id:37,topic:"od",text:"Nesne zamiri ne zaman kullanılmaz?",ctx:"Kural sorusu",options:["Nesne tanımlık (artículo) taşıdığında","Nesne cümlede daha önce geçtiyse","Nesne tanımlık, iyelik veya işaret sıfatı taşımıyorsa","Her zaman kullanılır"],answer:2,exp:"Nesne zamiri (lo/la/los/las), nesne tanımlık vb. taşımıyorsa <strong>kullanılmaz</strong>. Örn: ¿Lleva cebolla? No, no lleva. (\"Ø\" — zamirsiz)"},
+
+  // ===== RESTORAN DİYALOĞU — 7 soru =====
+  {id:38,topic:"rest",text:"Garson müşteriye ne sorar? → \"¿Qué <em>______</em>?\"",options:["quiere","desea","come","bebe"],answer:1,exp:"Resmi ortamda garson: <strong>¿Qué desea?</strong> (Ne arzu edersiniz?). \"Usted\" formu kullanılır."},
+  {id:39,topic:"rest",text:"Müşteri bir şey daha isterken ne der? → \"Perdone, ¿me <em>______</em> un poco de pan?\"",options:["pone","trae","da","lleva"],answer:1,exp:"\"¿Me <strong>trae</strong> un poco de pan?\" = Bana biraz ekmek getirir misiniz? Traer = getirmek."},
+  {id:40,topic:"rest",text:"Müşteri hesap isterken ne der?",options:["¿Qué desea?","¿Me trae la cuenta, por favor?","¿Le pongo algo más?","¿Para beber?"],answer:1,exp:"Hesap istemek: <strong>¿Me trae la cuenta, por favor?</strong> (Hesabı getirir misiniz, lütfen?)"},
+  {id:41,topic:"rest",text:"\"¿Le pongo algo más?\" cümlesini kim söyler?",options:["Müşteri (cliente)","Garson (camarero)","Aşçı","Kasap"],answer:1,exp:"<strong>¿Le pongo algo más?</strong> = Başka bir şey koyayım mı? Bu garsonun sorusudur."},
+  {id:42,topic:"rest",text:"\"De primero, quiero ensalada. De segundo, merluza.\" — Bu ne anlama gelir?",options:["İlk yemek salata, ikinci yemek berlam balığı","Birincisini istiyorum, ikinciyi değil","Önce market, sonra balıkçı","Birinci kat salata, ikinci kat balık"],answer:0,exp:"<strong>De primero</strong> = ilk yemek (birinci), <strong>de segundo</strong> = ikinci yemek. İspanyol menü düzeni: primero → segundo → postre."},
+  {id:43,topic:"rest",text:"\"¿Tienen gazpacho?\" — \"No, lo siento, solo en verano.\" Bu ne anlama gelir?",options:["Gazpacho çok pahalı","Gazpacho sadece yazın var","Gazpacho bitti","Gazpachoyu sevmiyorlar"],answer:1,exp:"\"Solo en verano\" = sadece yazın. Gazpacho soğuk bir çorba olduğu için genellikle yazın sunulur."},
+  {id:44,topic:"rest",text:"Garson \"Ahora mismo\" derse ne demek ister?",options:["Yarın getirim","Şimdi değil","Hemen şimdi","Bilmiyorum"],answer:2,exp:"<strong>Ahora mismo</strong> = hemen şimdi. Garsonun hızlı hizmet vaadi."},
+
+  // ===== VERBOS PONER / TRAER — 6 soru =====
+  {id:45,topic:"verb",text:"(Yo) <em>______</em> la mesa antes de cenar.",ctx:"poner = koymak/sofra kurmak",options:["pono","pongo","pone","ponemos"],answer:1,exp:"\"Poner\" 1. şahısta düzensiz: yo <strong>pongo</strong>. Poner la mesa = sofra kurmak."},
+  {id:46,topic:"verb",text:"(Yo) <em>______</em> el agua ahora mismo.",ctx:"traer = getirmek",options:["trao","traigo","trae","traemos"],answer:1,exp:"\"Traer\" 1. şahısta düzensiz: yo <strong>traigo</strong>. Diğer şahıslar düzenli: traes, trae, traemos..."},
+  {id:47,topic:"verb",text:"(Él) le <em>______</em> un café al cliente.",ctx:"poner → 3. tekil",options:["pongo","pone","pones","ponemos"],answer:1,exp:"\"Poner\" 3. tekil şahıs: él <strong>pone</strong>. Düzenli çekimlenir (sadece yo düzensiz)."},
+  {id:48,topic:"verb",text:"(Ellos) <em>______</em> el pan a la mesa.",ctx:"traer → 3. çoğul",options:["traigo","traen","traes","traemos"],answer:1,exp:"\"Traer\" 3. çoğul: ellos <strong>traen</strong>."},
+  {id:49,topic:"verb",text:"\"¿Me <em>______</em> la carta, por favor?\" — Müşteri garsondan menüyü istiyor.",options:["pone","trae","lleva","pongo"],answer:1,exp:"Garsondan bir şey getirmesini istemek: ¿Me <strong>trae</strong>...? (Bana ... getirir misiniz?)"},
+  {id:50,topic:"verb",text:"\"¿Qué le <em>______</em>?\" — Garson müşteriye ne koyayım diye soruyor.",options:["traigo","llevo","pongo","como"],answer:2,exp:"Garson: ¿Qué le <strong>pongo</strong>? = Size ne koyayım? (Ne istersiniz?)"},
+
+  // ===== SABOR SIFATLARI — 5 soru =====
+  {id:51,topic:"sabor",text:"\"¿No es todo muy <em>______</em>?\" — Hint yemeği hakkında.",ctx:"Hint yemekleri genelde baharatlıdır.",options:["soso","dulce","picante","salado"],answer:2,exp:"Hint yemeği = baharatlı → <strong>picante</strong> (acı/baharatlı)."},
+  {id:52,topic:"sabor",text:"\"El café me gusta muy <em>______</em>.\" — 4 kaşık şeker atan biri.",ctx:"Çok şekerli seven biri.",options:["soso","dulce","picante","salado"],answer:1,exp:"Çok şekerli = <strong>dulce</strong> (tatlı)."},
+  {id:53,topic:"sabor",text:"\"Las patatas están un poco <em>______</em>, pero están buenísimas.\" — Tuzlu yemekten bahsediliyor.",ctx:"Çok tuzlu ama çok lezzetli.",options:["sosas","dulces","picantes","saladas"],answer:3,exp:"Tuzlu = <strong>saladas</strong>. \"Las patatas\" kadın çoğul → salad<strong>as</strong>."},
+  {id:54,topic:"sabor",text:"\"Los macarrones están un poco <em>______</em>.\" — Az tuzlu, yavan.",options:["sosos","dulces","picantes","salados"],answer:0,exp:"Yavan/tuzsuz = <strong>sosos</strong>. \"Los macarrones\" erkek çoğul → sos<strong>os</strong>."},
+  {id:55,topic:"sabor",text:"\"Soso\" kelimesinin Türkçe karşılığı nedir?",options:["Tatlı","Acı","Tuzlu","Yavan/tuzsuz"],answer:3,exp:"<strong>Soso/a</strong> = yavan, tuzsuz, tatsız. Tuzun veya baharatın az olduğunu ifade eder."},
+
+  // ===== EL BOCATA — FİYATLAR — 5 soru =====
+  {id:56,topic:"bocata",text:"Bocadillo de calamares: 4,90 € — Bu fiyat nasıl söylenir?",options:["Cuatro euros con noventa","Cuatro con noventa","Cuatro noventa","Hepsi doğru olabilir"],answer:3,exp:"İspanyolca'da fiyatlar birkaç şekilde söylenebilir: <strong>cuatro con noventa</strong> (en yaygın), cuatro euros con noventa (céntimos), veya kısaca cuatro noventa."},
+  {id:57,topic:"bocata",text:"Bocadillo de jamón serrano: 3,90 € — Nasıl söylenir?",options:["Tres con noventa","Tres euros noventa","Treinta y nueve","Tres con nueve"],answer:0,exp:"3,90 € = <strong>tres con noventa</strong>. Virgülden sonra \"con\" kullanılır, ardından sent kısmı gelir."},
+  {id:58,topic:"bocata",text:"Bocadillo de chorizo: 2,25 € — Nasıl söylenir?",options:["Dos con veinticinco","Veintidós con cinco","Dos con veintecinco","Dos veintiuno"],answer:0,exp:"2,25 € = <strong>dos con veinticinco</strong>."},
+  {id:59,topic:"bocata",text:"Menüdeki en pahalı bocadillo hangisidir?",ctx:"El Bocata menüsü",options:["Jamón serrano (3,90 €)","Calamares (4,90 €)","Tortilla de patatas (3,50 €)","Pollo (3,50 €)"],answer:1,exp:"En pahalı: <strong>Calamares — 4,90 €</strong>. Kalamar sandviçi menünün en pahalı ürünüdür."},
+  {id:60,topic:"bocata",text:"\"Tres con treinta\" hangi fiyata karşılık gelir?",ctx:"Diyalogdaki kahve + su fiyatı: 3,30 €",options:["3,13 €","33,00 €","3,30 €","3,03 €"],answer:2,exp:"Tres con treinta = <strong>3,30 €</strong>. \"Con\" virgülü temsil eder: 3 (tres) + 30 (treinta)."}
+];
+
+let shuffled=[];
+let answers={};
+let answeredCount=0;
+let timerInterval=null;
+let timeLeft=45*60;
+const TOTAL=60;
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+function startTest(){
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('testArea').classList.remove('hidden');
+  shuffled=shuffle(questions);
+  renderTopicBar();
+  renderQuestions();
+  startTimer();
+}
+
+function renderTopicBar(){
+  document.getElementById('topicBar').innerHTML=Object.entries(T).map(([k,t])=>{
+    const c=shuffled.filter(q=>q.topic===k).length;
+    return `<span class="topic-tag" style="background:${t.bg};color:${t.color}">${t.name} (${c})</span>`;
+  }).join('');
+}
+
+function renderQuestions(){
+  document.getElementById('questionsContainer').innerHTML=shuffled.map((q,idx)=>{
+    const t=T[q.topic];
+    return `<div class="question-card" id="qcard-${q.id}">
+      <div class="q-header">
+        <div class="q-number">${idx+1}</div>
+        <span class="q-topic" style="background:${t.bg};color:${t.color}">${t.name}</span>
+      </div>
+      ${q.ctx?`<div class="q-ctx">💡 ${q.ctx}</div>`:''}
+      <div class="q-text">${q.text}</div>
+      <div class="options">
+        ${q.options.map((o,i)=>`<button class="opt-btn" id="opt-${q.id}-${i}" onclick="sel(${q.id},${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}
+      </div>
+      <div id="exp-${q.id}"></div>
+    </div>`;
+  }).join('');
+}
+
+function sel(qId,optIdx){
+  if(answers[qId]!==undefined)return;
+  const q=shuffled.find(x=>x.id===qId);
+  answers[qId]=optIdx;
+  answeredCount++;
+  const ok=optIdx===q.answer;
+  document.getElementById(`qcard-${qId}`).classList.add(ok?'correct':'wrong');
+  q.options.forEach((_,i)=>{
+    const b=document.getElementById(`opt-${qId}-${i}`);
+    b.disabled=true;
+    if(i===q.answer)b.classList.add('correct-answer');
+    if(i===optIdx&&!ok)b.classList.add('wrong-answer');
+  });
+  document.getElementById(`exp-${qId}`).innerHTML=`<div class="explanation ${ok?'correct-exp':'wrong-exp'}">${ok?'✅':'❌'} ${q.exp}</div>`;
+  const p=Math.round((answeredCount/TOTAL)*100);
+  document.getElementById('progressText').textContent=`${answeredCount} / ${TOTAL}`;
+  document.getElementById('progressPercent').textContent=`${p}%`;
+  document.getElementById('progressFill').style.width=`${p}%`;
+  if(answeredCount>=TOTAL){document.getElementById('finishBtn').style.display='block';document.getElementById('finishBtn').scrollIntoView({behavior:'smooth',block:'center'})}
+}
+
+function startTimer(){
+  const el=document.getElementById('timer');
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){clearInterval(timerInterval);finishTest();return}
+    const m=Math.floor(timeLeft/60),s=timeLeft%60;
+    el.textContent=`⏱ ${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    el.className='timer-box'+(timeLeft<=180?' danger':timeLeft<=420?' warning':'');
+  },1000);
+}
+
+function finishTest(){
+  clearInterval(timerInterval);
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('resultsArea').classList.remove('hidden');
+  let correct=0;
+  const ts={};
+  Object.keys(T).forEach(k=>{ts[k]={total:0,correct:0}});
+  shuffled.forEach(q=>{ts[q.topic].total++;if(answers[q.id]===q.answer){correct++;ts[q.topic].correct++}});
+  const pct=Math.round((correct/TOTAL)*100);
+  const elapsed=(45*60)-timeLeft;
+  const mins=Math.floor(elapsed/60),secs=elapsed%60;
+  let grade,gc;
+  if(pct>=90){grade='🏆 Mükemmel!';gc='#d4af37'}
+  else if(pct>=75){grade='🌟 Çok İyi!';gc='#66bb6a'}
+  else if(pct>=60){grade='👍 İyi!';gc='#42a5f5'}
+  else if(pct>=40){grade='📚 Geliştirilmeli';gc='#ffa726'}
+  else{grade='💪 Daha Çok Çalışmalısın';gc='#ef5350'}
+  const tHTML=Object.entries(T).map(([k,t])=>{
+    const s=ts[k];if(!s.total)return '';
+    const p=Math.round((s.correct/s.total)*100);
+    const bc=p>=75?'#66bb6a':p>=50?'#ffa726':'#ef5350';
+    return `<div class="topic-row"><span class="t-name" style="color:${t.color}">${t.name}</span><div class="t-bar"><div class="t-bar-fill" style="width:${p}%;background:${bc}"></div></div><span class="t-score">${s.correct}/${s.total}</span></div>`;
+  }).join('');
+  document.getElementById('resultsArea').innerHTML=`
+    <div class="results-card">
+      <div class="score-circle" style="border-color:${gc}"><div class="score-num" style="color:${gc}">${pct}</div><div class="score-total">/ 100</div></div>
+      <h2 style="font-family:'Playfair Display',serif;color:${gc};font-size:24px;margin-bottom:8px">${grade}</h2>
+      <p style="color:rgba(232,230,225,0.5);font-size:14px">${correct} doğru / ${TOTAL-correct} yanlış / ${TOTAL-answeredCount} boş</p>
+      <div class="results-stats">
+        <div class="stat-item"><div class="stat-val" style="color:#66bb6a">${correct}</div><div class="stat-label">Doğru</div></div>
+        <div class="stat-item"><div class="stat-val" style="color:#ef5350">${TOTAL-correct}</div><div class="stat-label">Yanlış</div></div>
+        <div class="stat-item"><div class="stat-val" style="color:#42a5f5">${mins}:${secs.toString().padStart(2,'0')}</div><div class="stat-label">Süre</div></div>
+      </div>
+      <div class="topic-breakdown"><h3>📊 Konu Bazlı Analiz</h3>${tHTML}</div>
+      <button class="btn-restart" onclick="location.reload()">🔄 Testi Tekrarla</button>
+    </div>`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
