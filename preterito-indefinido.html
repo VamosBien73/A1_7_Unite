@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretérito Indefinido — VaBien Akademi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #0a1628;
+      color: #f5f1e8;
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .test-header {
+      position: sticky;
+      top: 0;
+      background: #0a1628;
+      padding: 16px 0;
+      border-bottom: 2px solid #d4a84b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      margin-bottom: 24px;
+    }
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #d4a84b;
+    }
+    .timer {
+      font-size: 20px;
+      font-weight: 700;
+      color: #d4a84b;
+      background: rgba(212, 168, 75, 0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #d4a84b;
+    }
+    .timer.warning { color: #c0392b; border-color: #c0392b; }
+    .progress {
+      margin-bottom: 20px;
+    }
+    #progress-text {
+      font-size: 14px;
+      color: #d4a84b;
+      font-weight: 600;
+    }
+    .progress-bar {
+      height: 6px;
+      background: rgba(245, 241, 232, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #d4a84b, #d4af37);
+      transition: width 0.3s ease;
+    }
+    h1.test-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #d4a84b;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .test-subtitle {
+      text-align: center;
+      color: #7a7a7a;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+    .question-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(212, 168, 75, 0.2);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .question-hint {
+      font-size: 13px;
+      color: #d4a84b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .question-text {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #f5f1e8;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .option {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px solid rgba(245, 241, 232, 0.15);
+      border-radius: 8px;
+      padding: 14px 18px;
+      cursor: pointer;
+      font-size: 16px;
+      color: #f5f1e8;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .option:hover:not(:disabled) {
+      border-color: #d4a84b;
+      background: rgba(212, 168, 75, 0.05);
+    }
+    .option:disabled {
+      cursor: not-allowed;
+    }
+    .option-letter {
+      background: rgba(212, 168, 75, 0.2);
+      color: #d4a84b;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .option.correct {
+      background: rgba(46, 139, 87, 0.2);
+      border-color: #2e8b57;
+      color: #a8e6c4;
+    }
+    .option.correct .option-letter {
+      background: #2e8b57;
+      color: white;
+    }
+    .option.wrong {
+      background: rgba(192, 57, 43, 0.2);
+      border-color: #c0392b;
+      color: #ffb3a8;
+    }
+    .option.wrong .option-letter {
+      background: #c0392b;
+      color: white;
+    }
+    .feedback {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct {
+      background: rgba(46, 139, 87, 0.15);
+      border-left: 3px solid #2e8b57;
+      color: #c8e6c4;
+    }
+    .feedback.wrong {
+      background: rgba(192, 57, 43, 0.15);
+      border-left: 3px solid #c0392b;
+      color: #f0c8c0;
+    }
+    .feedback strong { color: #d4a84b; }
+    .btn {
+      background: #d4a84b;
+      color: #0a1628;
+      border: none;
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      margin-top: 8px;
+    }
+    .btn:hover:not(:disabled) { background: #e6b955; transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn.secondary {
+      background: transparent;
+      border: 1.5px solid #d4a84b;
+      color: #d4a84b;
+    }
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    #result-screen {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    #result-screen.hidden { display: none; }
+    #result-screen h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      color: #d4a84b;
+      margin-bottom: 16px;
+    }
+    .score-big {
+      font-size: 60px;
+      font-weight: 900;
+      color: #f5f1e8;
+      margin: 20px 0;
+    }
+    .score-percent {
+      font-size: 24px;
+      color: #d4a84b;
+      margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: 700;
+      background: rgba(212, 168, 75, 0.15);
+      border: 2px solid #d4a84b;
+      color: #d4a84b;
+      margin-bottom: 30px;
+    }
+    .topic-breakdown {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      text-align: left;
+    }
+    .topic-breakdown h3 {
+      font-family: 'Playfair Display', serif;
+      color: #d4a84b;
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+    .topic-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+    }
+    .topic-row:last-child { border-bottom: none; }
+    .wrong-list {
+      text-align: left;
+      margin-top: 24px;
+    }
+    .wrong-list h3 {
+      font-family: 'Playfair Display', serif;
+      color: #d4a84b;
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+    .wrong-item {
+      background: rgba(255, 255, 255, 0.04);
+      border-left: 3px solid #c0392b;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+    }
+    .wrong-item .q { font-weight: 600; margin-bottom: 4px; color: #f5f1e8; }
+    .wrong-item .correct-ans { color: #2e8b57; font-weight: 600; }
+    .wrong-item .explanation { color: #c8c2b4; font-size: 13px; margin-top: 6px; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      h1.test-title { font-size: 22px; }
+      .question-text { font-size: 16px; }
+      .option { font-size: 15px; padding: 12px 14px; }
+      .timer { font-size: 16px; padding: 4px 10px; }
+      .brand { font-size: 16px; }
+      .score-big { font-size: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="test-header">
+      <div class="brand">VaBien Akademi</div>
+      <div class="timer" id="timer">00:00</div>
+    </header>
+
+    <div id="test-view">
+      <h1 class="test-title">Pretérito Indefinido Testi</h1>
+      <p class="test-subtitle">A2 · 40 soru · 60 dakika</p>
+
+      <div class="progress">
+        <span id="progress-text">Soru 1 / 40</span>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <div id="question-container"></div>
+
+      <div class="action-bar">
+        <button class="btn secondary" id="finish-btn">Testi Bitir</button>
+        <button class="btn" id="next-btn" disabled>Sonraki Soru</button>
+      </div>
+    </div>
+
+    <div id="result-screen" class="hidden">
+      <h2>Test Tamamlandı</h2>
+      <div class="score-big" id="score-big">0 / 0</div>
+      <div class="score-percent" id="score-percent">%0</div>
+      <div class="badge" id="badge">📚</div>
+      <div class="topic-breakdown" id="topic-breakdown"></div>
+      <div class="wrong-list" id="wrong-list"></div>
+      <button class="btn" id="restart-btn">Tekrar Başla</button>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // VERİLER — BURASI DOLDURULACAK
+    // ============================================
+    const TEST_CONFIG = {
+      title: "Pretérito Indefinido Testi",
+      level: "A2",
+      durationMinutes: 60,
+    };
+
+    const questions = [
+  {
+    "id": 1,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ayer (yo) ___ a mis abuelos. (visitar)",
+    "options": {
+      "A": "visito",
+      "B": "visité",
+      "C": "visitó",
+      "D": "visitaste"
+    },
+    "correct": "B",
+    "explanation": "İndefinido -AR yo eki: <em>-é</em> (aksanlı!): visité. Aksansız 'visito' şimdiki zamandır, 'visitó' ise o (3. tekil)."
+  },
+  {
+    "id": 2,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "¿(Tú) ___ en Madrid? (nacer)",
+    "options": {
+      "A": "naciste",
+      "B": "nací",
+      "C": "naces",
+      "D": "nació"
+    },
+    "correct": "A",
+    "explanation": "-ER fiil tú eki: <em>-iste</em> → naciste = doğdun. Nací (ben), nació (o)."
+  },
+  {
+    "id": 3,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ella ___ una carta a su familia. (escribir)",
+    "options": {
+      "A": "escribí",
+      "B": "escribe",
+      "C": "escribiste",
+      "D": "escribió"
+    },
+    "correct": "D",
+    "explanation": "-IR fiil 3. tekil eki: <em>-ió</em> (aksanlı): escribió. Aksan düşerse (escribio) yanlış yazımdır."
+  },
+  {
+    "id": 4,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Nosotros ___ el museo del Prado ayer. (visitar)",
+    "options": {
+      "A": "visitemos",
+      "B": "visitábamos",
+      "C": "visitamos",
+      "D": "visitasteis"
+    },
+    "correct": "C",
+    "explanation": "-AR nosotros: <em>visitamos</em> — DİKKAT: bu form presente ile AYNIDIR; zamanı 'ayer' gibi belirteçler gösterir. Aynı durum -IR fiillerinde de vardır (escribimos)."
+  },
+  {
+    "id": 5,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Vosotros ___ muchos mensajes anoche. (escribir)",
+    "options": {
+      "A": "escribieron",
+      "B": "escribisteis",
+      "C": "escribís",
+      "D": "escribiste"
+    },
+    "correct": "B",
+    "explanation": "Vosotros eki: <em>-isteis</em> → escribisteis. 'Escribís' presente, 'escribieron' ellos formudur."
+  },
+  {
+    "id": 6,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Mis hermanos ___ en 1998. (nacer)",
+    "options": {
+      "A": "nacieron",
+      "B": "nacimos",
+      "C": "nacisteis",
+      "D": "nació"
+    },
+    "correct": "A",
+    "explanation": "3. çoğul eki: <em>-ieron</em> → nacieron = doğdular. En 1998 = 1998'de (yıllarla 'en')."
+  },
+  {
+    "id": 7,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Yo ___ en Estambul en 1995. (nacer)",
+    "options": {
+      "A": "nace",
+      "B": "nazco",
+      "C": "naciste",
+      "D": "nací"
+    },
+    "correct": "D",
+    "explanation": "-ER yo eki: <em>-í</em> (aksanlı): nací = doğdum. Kendi doğumundan bahsetmek indefinido'nun en klasik kullanımıdır."
+  },
+  {
+    "id": 8,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Kural sorusu:",
+    "question": "İndefinido'da -ER ve -IR fiillerinin ekleri için ne söylenebilir?",
+    "options": {
+      "A": "Tamamen farklıdır",
+      "B": "-ER'de aksan yoktur",
+      "C": "Ekleri BİRBİRİNİN AYNISIDIR (-í, -iste, -ió...)",
+      "D": "-IR fiilleri çekilmez"
+    },
+    "correct": "C",
+    "explanation": "İndefinido'da -ER ve -IR aynı ek setini paylaşır: <em>-í, -iste, -ió, -imos, -isteis, -ieron</em>. Yani nacer ve escribir aynı kalıpla çekilir."
+  },
+  {
+    "id": 9,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Kural sorusu:",
+    "question": "'Visitamos' formu hangi iki zamanda AYNIDIR?",
+    "options": {
+      "A": "İndefinido ve futuro",
+      "B": "Presente ve indefinido",
+      "C": "Perfecto ve indefinido",
+      "D": "Hiçbir zamanda aynı değildir"
+    },
+    "correct": "B",
+    "explanation": "-AR ve -IR fiillerinde nosotros formu presente ile indefinido'da aynıdır: visitamos, escribimos. Anlamı bağlam/zaman belirteci ayırır: Ayer visitamos... (geçmiş)."
+  },
+  {
+    "id": 10,
+    "topic": "regular",
+    "topicLabel": "Düzenli çekim",
+    "hint": "Doğru çekimi seçin:",
+    "question": "¿Cuándo ___ usted esta novela? (escribir)",
+    "options": {
+      "A": "escribió",
+      "B": "escribiste",
+      "C": "escribo",
+      "D": "escribieron"
+    },
+    "correct": "A",
+    "explanation": "Usted, él/ella ile aynı çekilir: <em>escribió</em>. Usted'e 'escribiste' demek yanlıştır — o tú formudur."
+  },
+  {
+    "id": 11,
+    "topic": "yazim",
+    "topicLabel": "Yazım değişimi (-zar/-gar/-car)",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Yo ___ a estudiar español el año pasado. (empezar)",
+    "options": {
+      "A": "empezé",
+      "B": "empiecé",
+      "C": "empecí",
+      "D": "empecé"
+    },
+    "correct": "D",
+    "explanation": "-ZAR fiillerinde yo formunda z→c olur: <em>empecé</em>. 'Empezé' yazım hatasıdır; kök değişimi (ie) indefinido'da OLMAZ."
+  },
+  {
+    "id": 12,
+    "topic": "yazim",
+    "topicLabel": "Yazım değişimi (-zar/-gar/-car)",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ayer ___ muy tarde a casa. (llegar, yo)",
+    "options": {
+      "A": "llegé",
+      "B": "llegó",
+      "C": "llegué",
+      "D": "lleguí"
+    },
+    "correct": "C",
+    "explanation": "-GAR fiillerinde yo formuna u girer: <em>llegué</em> — sert g sesini korumak için. 'Llegé' yazılırsa 'yece' okunurdu."
+  },
+  {
+    "id": 13,
+    "topic": "yazim",
+    "topicLabel": "Yazım değişimi (-zar/-gar/-car)",
+    "hint": "Doğru çekimi seçin:",
+    "question": "(Yo) ___ una foto en Instagram. (publicar)",
+    "options": {
+      "A": "publicé",
+      "B": "publiqué",
+      "C": "publicué",
+      "D": "publico"
+    },
+    "correct": "B",
+    "explanation": "-CAR fiillerinde yo formunda c→qu olur: <em>publiqué</em> — sert k sesi korunur. Aynı kural: buscar → busqué, tocar → toqué."
+  },
+  {
+    "id": 14,
+    "topic": "yazim",
+    "topicLabel": "Yazım değişimi (-zar/-gar/-car)",
+    "hint": "Kural sorusu:",
+    "question": "-zar / -gar / -car yazım değişimi hangi kişide ve neden olur?",
+    "options": {
+      "A": "Sadece YO formunda; telaffuzu korumak için",
+      "B": "Tüm kişilerde; vurgu için",
+      "C": "Nosotros hariç her yerde",
+      "D": "Sadece ellos formunda"
+    },
+    "correct": "A",
+    "explanation": "Değişim yalnız <em>yo</em> formundadır (empecé, llegué, publiqué) çünkü -é eki önünde z/g/c'nin sesi bozulurdu. Diğer kişiler normaldir: empezaste, llegaste, publicaste."
+  },
+  {
+    "id": 15,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ayer (yo) ___ en casa todo el día. (estar)",
+    "options": {
+      "A": "estuvo",
+      "B": "estaba",
+      "C": "esté",
+      "D": "estuve"
+    },
+    "correct": "D",
+    "explanation": "Estar düzensiz kök alır: <em>estuv-</em> + e → estuve. Dikkat: düzensiz köklerin ekleri AKSANSIZDIR (estuve, estuvo)."
+  },
+  {
+    "id": 16,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "¿Dónde ___ (tú) el fin de semana pasado? (estar)",
+    "options": {
+      "A": "estuvo",
+      "B": "estabas",
+      "C": "estuviste",
+      "D": "estuvistes"
+    },
+    "correct": "C",
+    "explanation": "Estuv- + iste → <em>estuviste</em>. 'Estuvistes' (sonda fazladan s) çok yaygın ama YANLIŞ bir konuşma hatasıdır."
+  },
+  {
+    "id": 17,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ellos ___ que salir temprano. (tener)",
+    "options": {
+      "A": "tenieron",
+      "B": "tuvieron",
+      "C": "tienen",
+      "D": "tuvon"
+    },
+    "correct": "B",
+    "explanation": "Tener → düzensiz kök <em>tuv-</em>: tuvieron. 'Tenieron' diye bir form yoktur. Tuvieron que salir = çıkmak zorunda kaldılar."
+  },
+  {
+    "id": 18,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ella ___ la cena para todos. (hacer)",
+    "options": {
+      "A": "hizo",
+      "B": "hació",
+      "C": "hico",
+      "D": "hace"
+    },
+    "correct": "A",
+    "explanation": "Hacer → kök <em>hic-</em>, ama 3. tekilde c→z olur: <em>hizo</em> (hico ✗). Diğerleri: hice, hiciste, hicimos, hicisteis, hicieron."
+  },
+  {
+    "id": 19,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ellos me ___ la verdad. (decir)",
+    "options": {
+      "A": "decieron",
+      "B": "dijieron",
+      "C": "dicieron",
+      "D": "dijeron"
+    },
+    "correct": "D",
+    "explanation": "Decir → kök <em>dij-</em> ve 3. çoğulda i düşer: <em>dijeron</em> (dijieron ✗ — kitaptaki uyarının ta kendisi!). Aynı kural j'li köklerde: trajeron, condujeron."
+  },
+  {
+    "id": 20,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Nosotros no ___ ir a la fiesta. (poder)",
+    "options": {
+      "A": "podimos",
+      "B": "pudieron",
+      "C": "pudimos",
+      "D": "podemos"
+    },
+    "correct": "C",
+    "explanation": "Poder → kök <em>pud-</em>: pudimos = gidemedik. 'Podimos' yanlıştır; 'podemos' şimdiki zamandır."
+  },
+  {
+    "id": 21,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "¿Qué ___ (tú) en la reunión? (decir)",
+    "options": {
+      "A": "dices",
+      "B": "dijiste",
+      "C": "deciste",
+      "D": "dijo"
+    },
+    "correct": "B",
+    "explanation": "Dij- + iste → <em>dijiste</em> = ne dedin? 'Deciste' diye bir form yoktur."
+  },
+  {
+    "id": 22,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Mis padres ___ a verme el domingo. (venir)",
+    "options": {
+      "A": "vinieron",
+      "B": "venieron",
+      "C": "vinen",
+      "D": "vieneron"
+    },
+    "correct": "A",
+    "explanation": "Venir → kök <em>vin-</em>: vinieron = geldiler. Venieron ✗."
+  },
+  {
+    "id": 23,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Yo no ___ nada del examen hasta el lunes. (saber)",
+    "options": {
+      "A": "sabí",
+      "B": "supé",
+      "C": "sabe",
+      "D": "supe"
+    },
+    "correct": "D",
+    "explanation": "Saber → kök <em>sup-</em>: supe = öğrendim/haberim oldu. Dikkat: düzensiz köklerde aksan YOKTUR — 'supé' yanlıştır."
+  },
+  {
+    "id": 24,
+    "topic": "irregular",
+    "topicLabel": "Düzensiz kökler",
+    "hint": "Kural sorusu:",
+    "question": "Düzensiz köklü fiiller (tuv-, hic-, pud-, quis-, sup-, vin-, pus-...) hangi ekleri alır?",
+    "options": {
+      "A": "-AR fiillerinin normal eklerini",
+      "B": "Her fiil kendi ekini",
+      "C": "ESTAR ile aynı ekleri: -e, -iste, -o, -imos, -isteis, -ieron (AKSANSIZ)",
+      "D": "Presente eklerini"
+    },
+    "correct": "C",
+    "explanation": "Kitaptaki kural: düzensiz köklü TÜM fiiller estar'ın eklerini alır: tuve, hiciste, pudo, quisimos, supisteis, vinieron. Ve hepsi <em>aksansız</em> — düzenlilerden en büyük farkı budur (visité ama estuve)."
+  },
+  {
+    "id": 25,
+    "topic": "ir-ser",
+    "topicLabel": "IR / SER (aynı form)",
+    "hint": "Doğru çekimi seçin:",
+    "question": "Ayer (yo) ___ al cine con mi hermana. (ir)",
+    "options": {
+      "A": "iba",
+      "B": "fui",
+      "C": "fue",
+      "D": "voy"
+    },
+    "correct": "B",
+    "explanation": "Ir'in indefinido'su tamamen düzensizdir: <em>fui, fuiste, fue, fuimos, fuisteis, fueron</em>. Fui al cine = sinemaya gittim."
+  },
+  {
+    "id": 26,
+    "topic": "ir-ser",
+    "topicLabel": "IR / SER (aynı form)",
+    "hint": "Doğru çekimi seçin:",
+    "question": "El concierto ___ increíble. (ser)",
+    "options": {
+      "A": "fue",
+      "B": "fui",
+      "C": "era",
+      "D": "estuvo"
+    },
+    "correct": "A",
+    "explanation": "Ser'in 3. tekili: <em>fue</em> = ...ydi/oldu. Bir olayı değerlendirmek (El concierto fue increíble) ser ile yapılır."
+  },
+  {
+    "id": 27,
+    "topic": "ir-ser",
+    "topicLabel": "IR / SER (aynı form)",
+    "hint": "Doğru çekimi seçin:",
+    "question": "¿(Vosotros) ___ a la playa el sábado? (ir)",
+    "options": {
+      "A": "fueron",
+      "B": "fuistes",
+      "C": "fuimos",
+      "D": "fuisteis"
+    },
+    "correct": "D",
+    "explanation": "Vosotros formu: <em>fuisteis</em>. 'Fuistes' yaygın bir konuşma hatasıdır, yazıda kesinlikle yanlış."
+  },
+  {
+    "id": 28,
+    "topic": "ir-ser",
+    "topicLabel": "IR / SER (aynı form)",
+    "hint": "Kavram sorusu:",
+    "question": "'Fuimos' kelimesi hem 'gittik' hem 'olduk/idik' anlamına gelebilir. Neden?",
+    "options": {
+      "A": "Yazım hatası olduğu için",
+      "B": "Fuimos yalnız ser'e aittir",
+      "C": "IR ve SER indefinido'da BİREBİR AYNI çekilir; anlamı bağlam belirler",
+      "D": "İkisi de yanlıştır"
+    },
+    "correct": "C",
+    "explanation": "Kitaptaki kural: <em>ir ve ser pretérito indefinido'da aynı formları paylaşır</em> (fui, fuiste, fue...). 'Fuimos al cine' = gittik; 'Fuimos amigos' = arkadaştık. Bağlam her şeydir."
+  },
+  {
+    "id": 29,
+    "topic": "marcadores",
+    "topicLabel": "Zaman belirteçleri",
+    "hint": "Boşluğu doldurun:",
+    "question": "___ pasado viajé a Senegal.",
+    "options": {
+      "A": "La año",
+      "B": "El año",
+      "C": "En año",
+      "D": "Año el"
+    },
+    "correct": "B",
+    "explanation": "Kalıp: <em>el + zaman birimi + pasado</em>: el año pasado, el mes pasado, el martes pasado. 'Año' eril olduğu için el."
+  },
+  {
+    "id": 30,
+    "topic": "marcadores",
+    "topicLabel": "Zaman belirteçleri",
+    "hint": "Boşluğu doldurun:",
+    "question": "La semana ___ fui al médico.",
+    "options": {
+      "A": "pasada",
+      "B": "pasado",
+      "C": "pasados",
+      "D": "pasadas"
+    },
+    "correct": "A",
+    "explanation": "'Semana' dişil → <em>la semana pasadA</em>. Uyum unutulmamalı: el año pasadO ama la semana pasadA."
+  },
+  {
+    "id": 31,
+    "topic": "marcadores",
+    "topicLabel": "Zaman belirteçleri",
+    "hint": "Boşluğu doldurun:",
+    "question": "Claudia Llosa dirigió ___ 2009 la película La teta asustada.",
+    "options": {
+      "A": "a",
+      "B": "al",
+      "C": "de",
+      "D": "en"
+    },
+    "correct": "D",
+    "explanation": "Yıllar, aylar ve mevsimlerle <em>en</em> kullanılır: en 2009, en mayo, en verano, en Navidad."
+  },
+  {
+    "id": 32,
+    "topic": "marcadores",
+    "topicLabel": "Zaman belirteçleri",
+    "hint": "Boşluğu doldurun:",
+    "question": "Terminó un máster en traducción ___ dos años. (iki yıl önce)",
+    "options": {
+      "A": "desde",
+      "B": "durante",
+      "C": "hace",
+      "D": "antes"
+    },
+    "correct": "C",
+    "explanation": "<em>Hace + süre</em> + geçmiş zaman = '... önce': hace dos años = iki yıl önce. (Ünite testlerimizden hatırla: que'siz hace + indefinido!)"
+  },
+  {
+    "id": 33,
+    "topic": "marcadores",
+    "topicLabel": "Zaman belirteçleri",
+    "hint": "Boşluğu doldurun:",
+    "question": "___ lunes fui al gimnasio. (geçen pazartesi)",
+    "options": {
+      "A": "En",
+      "B": "El",
+      "C": "Al",
+      "D": "—"
+    },
+    "correct": "B",
+    "explanation": "Günlerle edat kullanılmaz, artikel kullanılır: <em>el lunes</em> = pazartesi (günü). En lunes ✗."
+  },
+  {
+    "id": 34,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Se casaron en 2016 y tres años ___ tarde se divorciaron.",
+    "options": {
+      "A": "más",
+      "B": "menos",
+      "C": "muy",
+      "D": "mucho"
+    },
+    "correct": "A",
+    "explanation": "Kalıp: <em>süre + más tarde</em> = ... sonra: tres años más tarde = üç yıl sonra."
+  },
+  {
+    "id": 35,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Nos conocimos en 2015 y seis meses ___ nos fuimos a vivir juntos.",
+    "options": {
+      "A": "antes",
+      "B": "luego",
+      "C": "tarde",
+      "D": "después"
+    },
+    "correct": "D",
+    "explanation": "<em>Süre + después</em> = ... sonra: seis meses después = altı ay sonra. Alternatifi: seis meses más tarde."
+  },
+  {
+    "id": 36,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Ernesto acabó la carrera en julio y ___ mes siguiente encontró trabajo.",
+    "options": {
+      "A": "el",
+      "B": "en",
+      "C": "al",
+      "D": "del"
+    },
+    "correct": "C",
+    "explanation": "Kalıp: <em>al + zaman birimi + siguiente</em> = ertesi ...: al mes siguiente = ertesi ay, al día siguiente = ertesi gün."
+  },
+  {
+    "id": 37,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Trabajé como periodista ___ dos años.",
+    "options": {
+      "A": "desde",
+      "B": "durante",
+      "C": "hace que",
+      "D": "por qué"
+    },
+    "correct": "B",
+    "explanation": "Bitmiş bir sürecin uzunluğu: <em>durante + süre</em> = ... boyunca: trabajé durante dos años = iki yıl (boyunca) çalıştım."
+  },
+  {
+    "id": 38,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Vivo en España ___ febrero.",
+    "options": {
+      "A": "desde",
+      "B": "durante",
+      "C": "de",
+      "D": "hasta"
+    },
+    "correct": "A",
+    "explanation": "Belirli bir başlangıç noktası + hâlâ sürüyor: <em>desde + tarih</em>. Kitaptaki uyarı: iki sınır belirtilmiyorsa kısa edat (de) KULLANILAMAZ — 'Vivo en España de febrero' ✗."
+  },
+  {
+    "id": 39,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Estudio chino ___ unos meses.",
+    "options": {
+      "A": "durante",
+      "B": "hasta",
+      "C": "hace",
+      "D": "desde hace"
+    },
+    "correct": "D",
+    "explanation": "Süre miktarı + devam eden eylem: <em>desde hace</em>: estudio chino desde hace unos meses = birkaç aydır Çince çalışıyorum. (Duración testimizdeki yapı 2!)"
+  },
+  {
+    "id": 40,
+    "topic": "duracion",
+    "topicLabel": "Olay ilişkilendirme ve süre",
+    "hint": "Boşluğu doldurun:",
+    "question": "Trabajé en un banco ___ 2006 ___ 2012.",
+    "options": {
+      "A": "desde / durante",
+      "B": "en / en",
+      "C": "de / a",
+      "D": "hasta / desde"
+    },
+    "correct": "C",
+    "explanation": "İki sınır birlikte verildiğinde kısa çift kullanılabilir: <em>de 2006 a 2012</em> (= desde 2006 hasta 2012). Tek sınır varsa yalnız uzun edat geçerlidir: hasta los 19 años ✓, a los 19 años ✗."
+  }
+];
+
+    // ============================================
+    // CEVAP DAĞILIMI KONTROLÜ (geliştirme zamanı)
+    // ============================================
+    (function checkDistribution() {
+      const counts = {A:0, B:0, C:0, D:0};
+      questions.forEach(q => { counts[q.correct] = (counts[q.correct]||0) + 1; });
+      const min = Math.floor(questions.length / 4) - 2;
+      Object.entries(counts).forEach(([k, v]) => {
+        if (v < min) console.warn(`⚠️ Cevap "${k}" az temsil edilmiş: ${v} (minimum beklenen: ${min})`);
+      });
+      console.log('Cevap dağılımı:', counts);
+    })();
+
+    // ============================================
+    // TEST DURUMU
+    // ============================================
+    let currentIndex = 0;
+    let answers = [];  // {questionId, chosen, correct, topic}
+    let timerInterval = null;
+    let secondsLeft = TEST_CONFIG.durationMinutes * 60;
+
+    // ============================================
+    // TEST BAŞLAT
+    // ============================================
+    function startTest() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        secondsLeft--;
+        updateTimerDisplay();
+        if (secondsLeft <= 60) document.getElementById('timer').classList.add('warning');
+        if (secondsLeft <= 0) { clearInterval(timerInterval); finishTest(); }
+      }, 1000);
+      renderQuestion();
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(Math.max(0, secondsLeft) / 60).toString().padStart(2, '0');
+      const s = (Math.max(0, secondsLeft) % 60).toString().padStart(2, '0');
+      document.getElementById('timer').textContent = `${m}:${s}`;
+    }
+
+    function renderQuestion() {
+      const q = questions[currentIndex];
+      document.getElementById('progress-text').textContent = `Soru ${currentIndex + 1} / ${questions.length}`;
+      document.getElementById('progress-fill').style.width = `${((currentIndex) / questions.length) * 100}%`;
+
+      const container = document.getElementById('question-container');
+      container.innerHTML = `
+        <div class="question-card">
+          <div class="question-hint">${q.hint || 'Doğru cevabı seçin:'}</div>
+          <div class="question-text">${q.question}</div>
+          <div class="options" id="options-${q.id}">
+            ${['A','B','C','D'].map(letter => `
+              <button class="option" data-letter="${letter}" onclick="selectOption('${letter}')">
+                <span class="option-letter">${letter}</span>
+                <span>${q.options[letter]}</span>
+              </button>
+            `).join('')}
+          </div>
+          <div class="feedback" id="feedback-${q.id}"></div>
+        </div>
+      `;
+      document.getElementById('next-btn').disabled = true;
+    }
+
+    function selectOption(letter) {
+      const q = questions[currentIndex];
+      const optionButtons = document.querySelectorAll(`#options-${q.id} .option`);
+      const feedback = document.getElementById(`feedback-${q.id}`);
+      const isCorrect = letter === q.correct;
+
+      optionButtons.forEach(btn => {
+        btn.disabled = true;
+        const btnLetter = btn.dataset.letter;
+        if (btnLetter === q.correct) btn.classList.add('correct');
+        else if (btnLetter === letter) btn.classList.add('wrong');
+      });
+
+      feedback.classList.add('show');
+      if (isCorrect) {
+        feedback.classList.add('correct');
+        feedback.innerHTML = `<strong>✅ Doğru!</strong> ${q.explanation || ''}`;
+      } else {
+        feedback.classList.add('wrong');
+        feedback.innerHTML = `<strong>❌ Yanlış.</strong> Doğru cevap: <strong>${q.correct}) ${q.options[q.correct]}</strong><br><br>${q.explanation || ''}`;
+      }
+
+      answers.push({
+        questionId: q.id,
+        chosen: letter,
+        correct: q.correct,
+        isCorrect: isCorrect,
+        topic: q.topic || 'genel',
+        topicLabel: q.topicLabel || 'Genel'
+      });
+
+      document.getElementById('next-btn').disabled = false;
+    }
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        finishTest();
+      }
+    });
+
+    document.getElementById('finish-btn').addEventListener('click', () => {
+      if (confirm('Testi bitirmek istediğinize emin misiniz? Cevaplanmamış sorular yanlış sayılır.')) {
+        finishTest();
+      }
+    });
+
+    function finishTest() {
+      clearInterval(timerInterval);
+      document.getElementById('test-view').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+
+      const correct = answers.filter(a => a.isCorrect).length;
+      const total = questions.length;
+      const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+      document.getElementById('score-big').textContent = `${correct} / ${total}`;
+      document.getElementById('score-percent').textContent = `Başarı: %${percent}`;
+
+      // Rozet
+      let badge = '';
+      if (percent >= 90) badge = '🏆 Mükemmel!';
+      else if (percent >= 75) badge = '⭐ Çok İyi!';
+      else if (percent >= 60) badge = '👍 İyi';
+      else if (percent >= 40) badge = '📚 Biraz daha çalışalım';
+      else badge = '💪 Tekrar deneyelim';
+      document.getElementById('badge').textContent = badge;
+
+      // Konu bazlı dağılım
+      const topicStats = {};
+      answers.forEach(a => {
+        if (!topicStats[a.topic]) topicStats[a.topic] = { label: a.topicLabel, correct: 0, total: 0 };
+        topicStats[a.topic].total++;
+        if (a.isCorrect) topicStats[a.topic].correct++;
+      });
+      let topicHtml = '<h3>Konu Bazlı Sonuçlar</h3>';
+      Object.values(topicStats).forEach(t => {
+        const tp = Math.round((t.correct / t.total) * 100);
+        topicHtml += `<div class="topic-row"><span>${t.label}</span><span><strong>${t.correct}/${t.total}</strong> (%${tp})</span></div>`;
+      });
+      document.getElementById('topic-breakdown').innerHTML = topicHtml;
+
+      // Yanlış yapılanlar
+      const wrongs = answers.filter(a => !a.isCorrect);
+      if (wrongs.length > 0) {
+        let wrongHtml = '<h3>Yanlış Yapılan Sorular</h3>';
+        wrongs.forEach(w => {
+          const q = questions.find(qq => qq.id === w.questionId);
+          wrongHtml += `
+            <div class="wrong-item">
+              <div class="q">${q.question}</div>
+              <div>Doğru cevap: <span class="correct-ans">${q.correct}) ${q.options[q.correct]}</span></div>
+              <div class="explanation">${q.explanation || ''}</div>
+            </div>
+          `;
+        });
+        document.getElementById('wrong-list').innerHTML = wrongHtml;
+      }
+    }
+
+    document.getElementById('restart-btn').addEventListener('click', () => {
+      currentIndex = 0;
+      answers = [];
+      secondsLeft = TEST_CONFIG.durationMinutes * 60;
+      document.getElementById('timer').classList.remove('warning');
+      document.getElementById('result-screen').classList.add('hidden');
+      document.getElementById('test-view').classList.remove('hidden');
+      startTest();
+    });
+
+    // Başlangıç
+    document.addEventListener('DOMContentLoaded', startTest);
+  </script>
+</body>
+</html>
